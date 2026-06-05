@@ -10,8 +10,8 @@ import { formatAge, getAgePhase, getAgePhaseLabel, formatDateDE, addDays } from 
 export default function DashboardPage() {
   const { child, age, phaseLabel } = useChildProfile();
   const { latest: latestGrowth, entries: growthEntries } = useGrowthData();
-  const uExams = child ? useUExamsData(child.birthDate, child.birthTime) : null;
-  const vaccinations = child ? useVaccinationsData(child.birthDate, child.birthTime) : null;
+  const uExams = useUExams(child?.birthDate ?? '2000-01-01', child?.birthTime ?? '00:00');
+  const vaccinations = useVaccinations(child?.birthDate ?? '2000-01-01', child?.birthTime ?? '00:00');
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function DashboardPage() {
         <div className="text-2xl font-bold mt-1">{child.name}</div>
         <div className="text-3xl font-extrabold mt-2 tabular-nums">{age.label}</div>
         <div className="text-xs opacity-70 mt-1">{age.detailLabel}</div>
-        {uExams?.nextExam && (
+        {child && uExams.nextExam && (
           <div className="mt-3 text-xs font-medium px-3 py-1.5 rounded-full inline-block"
                style={{ background: 'rgba(255,255,255,0.2)' }}>
             Naechste U: {uExams.nextExam.name} ({uExams.nextExam.ageRange.label})
@@ -73,21 +73,21 @@ export default function DashboardPage() {
               <InfoRow icon="smile" text="Soziales Laecheln beobachten" />
             </>
           )}
-          {uExams?.nextExam && uExams.nextExam.daysUntilStart <= 14 && uExams.nextExam.status !== 'completed' && (
+          {child && uExams.nextExam && uExams.nextExam.daysUntilStart <= 14 && uExams.nextExam.status !== 'completed' && (
             <InfoRow
               icon="calendar"
               text={`${uExams.nextExam.name} steht bald an (${uExams.nextExam.ageRange.label})`}
               accent
             />
           )}
-          {uExams && uExams.overdueExams.length > 0 && (
+          {child && uExams.overdueExams.length > 0 && (
             <InfoRow
               icon="alert"
               text={`${uExams.overdueExams.map(e => e.name).join(', ')} ueberfaellig — bitte Termin vereinbaren`}
               danger
             />
           )}
-          {vaccinations?.nextDue && (
+          {child && vaccinations.nextDue && (
             <InfoRow
               icon="syringe"
               text={`Naechste Impfung: ${vaccinations.nextDue.vaccine.diseaseDe} (${vaccinations.nextDue.dose.doseName})`}
@@ -131,7 +131,7 @@ export default function DashboardPage() {
       </Card>
 
       {/* U-Untersuchungen Kurzuebersicht */}
-      {uExams && (
+      {child && (
         <Card title="U-Untersuchungen">
           <div className="space-y-2">
             {uExams.examsWithStatus.slice(0, 5).map(exam => (
@@ -153,7 +153,7 @@ export default function DashboardPage() {
       )}
 
       {/* Impfungen Kurzuebersicht */}
-      {vaccinations && vaccinations.standardDoses.length > 0 && (
+      {child && vaccinations.standardDoses.length > 0 && (
         <Card title="Naechste Impfungen">
           <div className="space-y-2">
             {getUpcomingVaccineGroups(vaccinations.standardDoses).slice(0, 3).map((group, i) => (
@@ -180,14 +180,6 @@ export default function DashboardPage() {
       </div>
     </div>
   );
-}
-
-// ── Helper Hooks (wrapper to avoid conditional hook calls) ──
-function useUExamsData(birthDate: string, birthTime: string) {
-  return useUExams(birthDate, birthTime);
-}
-function useVaccinationsData(birthDate: string, birthTime: string) {
-  return useVaccinations(birthDate, birthTime);
 }
 
 // ── Subcomponents ──

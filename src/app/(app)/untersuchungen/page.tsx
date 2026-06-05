@@ -8,10 +8,10 @@ import { UExamStatus } from '@/lib/types';
 
 export default function UntersuchungenPage() {
   const { child } = useChildProfile();
-  const uExams = child ? useUExamsWrapper(child.birthDate, child.birthTime) : null;
+  const uExams = useUExams(child?.birthDate ?? '2000-01-01', child?.birthTime ?? '00:00');
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
 
-  if (!child || !uExams) return <Spinner />;
+  if (!child) return <Spinner />;
 
   return (
     <div className="space-y-4">
@@ -163,9 +163,6 @@ export default function UntersuchungenPage() {
   );
 }
 
-function useUExamsWrapper(birthDate: string, birthTime: string) {
-  return useUExams(birthDate, birthTime);
-}
 
 function Section({ title, items }: { title: string; items: string[] }) {
   if (items.length === 0) return null;

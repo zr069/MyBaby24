@@ -9,12 +9,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function ImpfungenPage() {
   const { child } = useChildProfile();
-  const vacc = child ? useVaccWrapper(child.birthDate, child.birthTime) : null;
+  const vacc = useVaccinations(child?.birthDate ?? '2000-01-01', child?.birthTime ?? '00:00');
   const [filter, setFilter] = useState<'all' | 'standard' | 'due'>('due');
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
   const [recordingDose, setRecordingDose] = useState<VaccineDoseWithStatus | null>(null);
 
-  if (!child || !vacc) return <Spinner />;
+  if (!child) return <Spinner />;
 
   const filteredDoses = vacc.allDoses.filter(d => {
     if (filter === 'standard') return d.vaccine.category === 'standard';
@@ -197,9 +197,7 @@ export default function ImpfungenPage() {
   );
 }
 
-function useVaccWrapper(birthDate: string, birthTime: string) {
-  return useVaccinations(birthDate, birthTime);
-}
+
 
 // ── Recording Modal ──
 function RecordingModal({
