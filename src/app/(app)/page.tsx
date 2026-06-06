@@ -36,7 +36,6 @@ export default function DashboardPage() {
   const weightChange = latestGrowth?.weight && birthEntry?.weight ? latestGrowth.weight - birthEntry.weight : null;
   const weightChangePct = weightChange !== null && birthEntry?.weight ? ((weightChange / birthEntry.weight) * 100).toFixed(1) : null;
 
-  // Get age-relevant tips for clickable items
   const relevantTips = DEVELOPMENT_TIPS.filter(t => age.days >= t.ageFromDays && age.days <= t.ageToDays);
 
   function tipToExplanation(tipId: string): ExplanationItem | undefined {
@@ -61,8 +60,7 @@ export default function DashboardPage() {
         <div className="text-3xl font-extrabold mt-2 tabular-nums">{age.label}</div>
         <div className="text-xs opacity-70 mt-1">{age.detailLabel}</div>
         {uExams.nextExam && (
-          <button
-            onClick={() => router.push('/untersuchungen')}
+          <button onClick={() => router.push('/untersuchungen')}
             className="mt-3 text-xs font-medium px-3 py-1.5 rounded-full inline-block cursor-pointer"
             style={{ background: 'rgba(255,255,255,0.2)' }}>
             Naechste U: {uExams.nextExam.name} ({uExams.nextExam.ageRange.label}) &rarr;
@@ -81,44 +79,43 @@ export default function DashboardPage() {
         </button>
       )}
 
-      {/* Heute relevant — CLICKABLE */}
+      {/* Heute relevant */}
       <Card title="Heute relevant">
-        <div className="space-y-2">
+        <div className="space-y-1">
           {age.days <= 14 && (
             <>
-              <ClickableRow icon="\u2696" text="Gewichtsentwicklung beobachten"
+              <ClickableRow text="Gewichtsentwicklung beobachten"
                 onClick={() => setExplanation({
                   title: 'Gewichtsentwicklung beobachten',
                   content: 'In den ersten Lebenstagen verlieren Neugeborene etwas Gewicht (bis zu 7-10% des Geburtsgewichts ist normal). Ab Tag 5-7 sollte das Gewicht wieder steigen. Das Geburtsgewicht wird normalerweise bis Tag 10-14 wieder erreicht.\n\nWichtig:\n- Regelmaessig wiegen (alle 2-3 Tage reicht)\n- Gewichtsverlust > 10% oder keine Zunahme ab Tag 5: bitte Kinderarzt informieren\n- Gut gestillte Babys nehmen ca. 20-30 g pro Tag zu',
                   action: 'Wachstum erfassen',
                   actionHref: '/wachstum',
                 })} />
-              <ClickableRow icon="\u{1F4CF}" text="Groesse und Kopfumfang erfassen"
+              <ClickableRow text="Groesse und Kopfumfang erfassen"
                 onClick={() => setExplanation({
                   title: 'Groesse und Kopfumfang',
                   content: 'Groesse und Kopfumfang werden bei den U-Untersuchungen gemessen. Du kannst sie auch selbst erfassen, um den Verlauf zu dokumentieren.\n\nKopfumfang: Wird gemessen, um das Gehirnwachstum zu beurteilen. Ein zu schnelles oder zu langsames Wachstum sollte aerztlich abgeklaert werden.\n\nGroesse: Neugeborene wachsen im ersten Monat ca. 3-4 cm.',
                   action: 'Werte eintragen',
                   actionHref: '/wachstum',
                 })} />
-              <ClickableRow icon="\u{1F476}" text="Trinkverhalten und Allgemeinzustand beobachten"
+              <ClickableRow text="Trinkverhalten und Allgemeinzustand beobachten"
                 onClick={() => setExplanation({
                   title: 'Trinkverhalten und Allgemeinzustand',
-                  content: 'In den ersten Wochen sollte dein Baby:\n\n- Mind. 6-8 nasse Windeln pro Tag haben\n- Regelmaessig trinken (alle 2-3 Stunden)\n- Aktiv und wach wirken, wenn es nicht schlaeft\n- Die Haut sollte rosig und elastisch sein\n\nWarnzeichen — bitte zeitnah aerztlich abklaeren:\n- Weniger als 4 nasse Windeln pro Tag\n- Baby trinkt nicht oder verweigert die Brust/Flasche\n- Starke Schlaefrigkeit, Kind ist kaum weckbar\n- Fieber (> 38°C rektal)\n- Gelbe Hautfarbe nimmt zu statt ab',
+                  content: 'In den ersten Wochen sollte dein Baby:\n\n- Mind. 6-8 nasse Windeln pro Tag haben\n- Regelmaessig trinken (alle 2-3 Stunden)\n- Aktiv und wach wirken, wenn es nicht schlaeft\n- Die Haut sollte rosig und elastisch sein\n\nWarnzeichen — bitte zeitnah aerztlich abklaeren:\n- Weniger als 4 nasse Windeln pro Tag\n- Baby trinkt nicht oder verweigert die Brust/Flasche\n- Starke Schlaefrigkeit, Kind ist kaum weckbar\n- Fieber (> 38 Grad C rektal)\n- Gelbe Hautfarbe nimmt zu statt ab',
                 })} />
             </>
           )}
           {age.days > 14 && age.days <= 42 && (
             <>
-              <ClickableRow icon="\u2696" text="Regelmaessig Gewicht erfassen"
+              <ClickableRow text="Regelmaessig Gewicht erfassen"
                 onClick={() => setExplanation({
                   title: 'Gewicht erfassen',
                   content: 'In den ersten Wochen ist die Gewichtszunahme der wichtigste Indikator dafuer, dass die Ernaehrung gut funktioniert.\n\nRichtwerte:\n- Ca. 150-200 g pro Woche in den ersten 3 Monaten\n- Mind. 20-30 g pro Tag\n- Dein Kinderarzt wiegt bei jeder U-Untersuchung\n\nDu kannst auch zu Hause wiegen (Babywaage) oder in der Apotheke.',
                   action: 'Gewicht eintragen',
                   actionHref: '/wachstum',
                 })} />
-              <ClickableRow icon="\u{1F4C5}" text="U3-Termin planen" accent
-                onClick={() => router.push('/kalender')} />
-              <ClickableRow icon="\u{1F441}" text="Blickkontakt und Fixation beobachten"
+              <ClickableRow text="U3-Termin planen" accent onClick={() => router.push('/kalender')} />
+              <ClickableRow text="Blickkontakt und Fixation beobachten"
                 onClick={() => {
                   const tip = tipToExplanation('eye-contact');
                   if (tip) setExplanation(tip);
@@ -127,11 +124,9 @@ export default function DashboardPage() {
           )}
           {age.days > 42 && age.days <= 120 && (
             <>
-              <ClickableRow icon="\u{1FA78}" text="Erste Impfungen stehen an"
-                onClick={() => router.push('/impfungen')} />
-              <ClickableRow icon="\u2696" text="Wachstum dokumentieren"
-                onClick={() => router.push('/wachstum')} />
-              <ClickableRow icon="\u{1F60A}" text="Soziales Laecheln beobachten"
+              <ClickableRow text="Erste Impfungen stehen an" onClick={() => router.push('/impfungen')} />
+              <ClickableRow text="Wachstum dokumentieren" onClick={() => router.push('/wachstum')} />
+              <ClickableRow text="Soziales Laecheln beobachten"
                 onClick={() => setExplanation({
                   title: 'Soziales Laecheln',
                   content: 'Ab ca. 6-8 Wochen beginnen Babys, gezielt auf Gesichter zu laecheln. Das ist ein wichtiger sozialer Meilenstein.\n\nWas du tun kannst:\n- Viel Augenkontakt halten\n- Dein Baby anlaecheln und mit ihm sprechen\n- Auf sein Laecheln reagieren — das staerkt die Bindung\n\nJedes Kind ist anders — manche laecheln frueher, manche spaeter. Bei Sorgen bitte beim naechsten U-Termin ansprechen.',
@@ -140,28 +135,22 @@ export default function DashboardPage() {
           )}
           {age.days > 120 && (
             <>
-              <ClickableRow icon="\u{1F3CB}" text="Koerperliche Foerderung entdecken"
-                onClick={() => router.push('/foerderung')} />
-              <ClickableRow icon="\u2696" text="Wachstum dokumentieren"
-                onClick={() => router.push('/wachstum')} />
+              <ClickableRow text="Koerperliche Foerderung entdecken" onClick={() => router.push('/foerderung')} />
+              <ClickableRow text="Wachstum dokumentieren" onClick={() => router.push('/wachstum')} />
             </>
           )}
-
-          {/* U-Exam reminders */}
           {child && uExams.nextExam && uExams.nextExam.daysUntilStart <= 14 && uExams.nextExam.status !== 'completed' && (
-            <ClickableRow icon="\u{1F4C5}"
+            <ClickableRow
               text={`${uExams.nextExam.name} steht bald an (${uExams.nextExam.ageRange.label})`}
-              accent
-              onClick={() => router.push('/untersuchungen')} />
+              accent onClick={() => router.push('/untersuchungen')} />
           )}
           {child && uExams.overdueExams.length > 0 && (
-            <ClickableRow icon="\u26A0"
+            <ClickableRow
               text={`${uExams.overdueExams.map(e => e.name).join(', ')} ueberfaellig — bitte Termin vereinbaren`}
-              danger
-              onClick={() => router.push('/kalender')} />
+              danger onClick={() => router.push('/kalender')} />
           )}
           {child && vaccinations.nextDue && (
-            <ClickableRow icon="\u{1FA78}"
+            <ClickableRow
               text={`Naechste Impfung: ${vaccinations.nextDue.vaccine.diseaseDe}`}
               onClick={() => router.push('/impfungen')} />
           )}
@@ -224,15 +213,10 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Explanation Sheet */}
-      {explanation && (
-        <ExplanationSheet item={explanation} onClose={() => setExplanation(null)} />
-      )}
+      {explanation && <ExplanationSheet item={explanation} onClose={() => setExplanation(null)} />}
     </div>
   );
 }
-
-// ── Subcomponents ──
 
 function LoadingSpinner() {
   return (
@@ -261,15 +245,18 @@ function StatBox({ label, value }: { label: string; value: string }) {
   );
 }
 
-function ClickableRow({ icon, text, accent, danger, onClick }: {
-  icon: string; text: string; accent?: boolean; danger?: boolean; onClick?: () => void;
+function ClickableRow({ text, accent, danger, onClick }: {
+  text: string; accent?: boolean; danger?: boolean; onClick?: () => void;
 }) {
-  const color = danger ? 'var(--danger)' : accent ? 'var(--accent)' : 'var(--text-secondary)';
+  const dotColor = danger ? 'var(--danger)' : accent ? 'var(--accent)' : 'var(--accent)';
+  const textColor = danger ? 'var(--danger)' : accent ? 'var(--accent)' : 'var(--text-secondary)';
   return (
-    <button onClick={onClick} className="w-full flex items-start gap-2 text-sm text-left py-1.5 rounded-lg transition-all active:opacity-70" style={{ color }}>
-      <span className="mt-0.5 text-xs flex-shrink-0">{icon}</span>
+    <button onClick={onClick}
+      className="w-full flex items-center gap-2.5 text-sm text-left py-2 px-2 rounded-xl transition-all active:opacity-70"
+      style={{ color: textColor }}>
+      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: dotColor }} />
       <span className="flex-1">{text}</span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mt-0.5 flex-shrink-0" style={{ opacity: 0.4 }}>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="flex-shrink-0" style={{ opacity: 0.3 }}>
         <polyline points="9 18 15 12 9 6" />
       </svg>
     </button>
