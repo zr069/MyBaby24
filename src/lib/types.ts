@@ -124,3 +124,61 @@ export type AgePhase =
   | 'Saeugling'        // 1-12 months
   | 'Kleinkind'        // 1-3 years
   | 'Vorschulkind';    // 3-6 years
+
+// ── Auth & Family ───────────────────────────
+export interface FamilyProfile {
+  id: string;
+  pin: string;          // hashed PIN for access
+  createdAt: string;
+}
+
+// ── Pediatrician ────────────────────────────
+export interface Pediatrician {
+  id: string;
+  name: string;
+  practice: string;
+  street: string;
+  zip: string;
+  city: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  lat?: number;
+  lng?: number;
+}
+
+// ── Calendar ────────────────────────────────
+export type CalendarEventType = 'u_exam' | 'vaccination' | 'doctor' | 'other';
+
+export interface CalendarEvent {
+  id: string;
+  childId: string;
+  title: string;
+  date: string;
+  time?: string;
+  type: CalendarEventType;
+  description?: string;
+  location?: string;
+  reminder?: boolean;
+  completed?: boolean;
+  linkedExamKey?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── Development Tips ────────────────────────
+export type DevelopmentCategory = 'physical' | 'cognitive' | 'social' | 'language';
+
+export interface DevelopmentTip {
+  id: string;
+  title: string;
+  category: DevelopmentCategory;
+  ageFromDays: number;
+  ageToDays: number;
+  shortDescription: string;
+  fullDescription: string;
+  steps?: string[];
+  duration?: string;
+  frequency?: string;
+  source?: string;
+}
